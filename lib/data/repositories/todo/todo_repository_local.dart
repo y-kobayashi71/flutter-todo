@@ -16,6 +16,36 @@ class TodoRepositoryLocal implements TodoRepository {
     return query.watch().map((rows) => rows.map(_toTodo).toList());
   }
 
+  @override
+  Future<void> add(String title) async {
+    await _database
+        .into(_database.todos)
+        .insert(TodosCompanion.insert(title: title));
+  }
+
+  @override
+  Future<void> update(Todo todo) async {
+    await (_database.update(
+      _database.todos,
+    )..where((task) => task.id.equals(todo.id))).write(
+      TodosCompanion(title: Value(todo.title), done: Value(todo.done)),
+    );
+  }
+
+  @override
+  Future<void> delete(int id) async {
+    await (_database.delete(
+      _database.todos,
+    )..where((task) => task.id.equals(id))).go();
+  }
+
+  @override
+  Future<void> deleteCompleted() async {
+    await (_database.delete(
+      _database.todos,
+    )..where((task) => task.done.equals(true))).go();
+  }
+
   Todo _toTodo(TodoRow row) {
     return Todo(
       id: row.id,

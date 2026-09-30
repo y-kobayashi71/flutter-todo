@@ -34,30 +34,12 @@ class TodoViewmodel extends ChangeNotifier {
   final TodoRepository _todoRepository;
   late final StreamSubscription<List<Todo>> _subscription;
   List<Todo> _todos = const [];
-  TodoFilter _filter = TodoFilter.all;
   bool _loading = true;
   Object? _error;
 
+  List<Todo> get todos => _todos;
   bool get loading => _loading;
   Object? get error => _error;
-  TodoFilter get filter => _filter;
-
-  List<Todo> get visibleTodos {
-    switch (_filter) {
-      case TodoFilter.all:
-        return _todos;
-      case TodoFilter.active:
-        return _todos.where((todo) => !todo.done).toList();
-      case TodoFilter.done:
-        return _todos.where((todo) => todo.done).toList();
-    }
-  }
-
-  void setFilter(TodoFilter filter) {
-    if (_filter == filter) return;
-    _filter = filter;
-    notifyListeners();
-  }
 
   @override
   void dispose() {

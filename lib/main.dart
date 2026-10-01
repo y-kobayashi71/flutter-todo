@@ -1,7 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/repositories/todo/todo_repository.dart';
+import 'package:todo_app/data/repositories/todo/todo_repository_local.dart';
+import 'package:todo_app/data/services/app_database.dart';
+import 'package:todo_app/ui/core/themes/theme.dart';
+import 'package:todo_app/ui/todo/view_models/todo_viewmodel.dart';
+import 'package:todo_app/ui/todo/widgets/todo_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = AppDatabase();
+  final TodoRepository repository = TodoRepositoryLocal(database: database);
+  final todoViewModel = TodoViewmodel(repository: repository);
+  runApp(TodoApp(viewmodel: todoViewModel));
+}
+
+class TodoApp extends StatelessWidget {
+  final TodoViewmodel viewmodel;
+  const TodoApp({super.key, required this.viewmodel});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'todo',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      home: TodoScreen(viewModel: viewmodel),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

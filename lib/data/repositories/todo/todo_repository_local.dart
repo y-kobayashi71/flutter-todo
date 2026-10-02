@@ -4,7 +4,7 @@ import 'package:todo_app/data/services/app_database.dart';
 import 'package:todo_app/domain/models/todo.dart';
 
 class TodoRepositoryLocal implements TodoRepository {
-  TodoRepositoryLocal({required AppDatabase database}) : _database = database;
+  TodoRepositoryLocal({required this._database});
 
   final AppDatabase _database;
 

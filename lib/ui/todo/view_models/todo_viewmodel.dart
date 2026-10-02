@@ -36,10 +36,20 @@ class TodoViewmodel extends ChangeNotifier {
   List<Todo> _todos = const [];
   bool _loading = true;
   Object? _error;
+  bool get hasCompleted => _todos.any((todo) => todo.done);
 
   List<Todo> get todos => _todos;
   bool get loading => _loading;
   Object? get error => _error;
+
+  Future<bool> add(String title) async {
+    final String trimmed = title.trim();
+    if (trimmed.isEmpty) return false;
+
+    await _todoRepository.add(trimmed);
+
+    return true;
+  }
 
   @override
   void dispose() {

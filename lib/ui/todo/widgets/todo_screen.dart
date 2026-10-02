@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/ui/todo/view_models/todo_viewmodel.dart';
-import 'package:todo_app/ui/todo/view_models/widgets/todo_tile.dart';
+import 'package:todo_app/ui/todo/widgets/todo_tile.dart';
 
 class TodoScreen extends StatelessWidget {
   final TodoViewmodel viewModel;

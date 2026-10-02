@@ -42,6 +42,28 @@ class TodoViewmodel extends ChangeNotifier {
   bool get loading => _loading;
   Object? get error => _error;
 
+  TodoFilter _filter = TodoFilter.all;
+  TodoFilter get filter => _filter;
+
+  List<Todo> get filteredTodos {
+    switch (filter) {
+      case TodoFilter.all:
+        return _todos;
+      case TodoFilter.active:
+        return _todos.where((todo) => !todo.done).toList();
+      case TodoFilter.done:
+        return _todos.where((todo) => todo.done).toList();
+    }
+  }
+
+  void setFilter(TodoFilter filter) {
+    if (_filter == filter) return;
+    _filter = filter;
+
+    print(filter);
+    notifyListeners();
+  }
+
   Future<bool> add(String title) async {
     final String trimmed = title.trim();
     if (trimmed.isEmpty) return false;

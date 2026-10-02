@@ -41,6 +41,7 @@ class _TodoScreenState extends State<TodoScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _todoInput(),
+                    _toolBar(),
                     const SizedBox(height: 16),
                     Expanded(child: _todoList()),
                   ],
@@ -61,7 +62,7 @@ class _TodoScreenState extends State<TodoScreen> {
       return const Center(child: Text('読み込みに失敗しました'));
     }
 
-    final todos = _viewmodel.todos;
+    final todos = _viewmodel.filteredTodos;
     if (todos.isEmpty) {
       return const Center(child: Text('タスクはありません'));
     }
@@ -70,6 +71,22 @@ class _TodoScreenState extends State<TodoScreen> {
       itemCount: todos.length,
       separatorBuilder: (context, index) => const Divider(height: 1),
       itemBuilder: (context, index) => TodoTile(todo: todos[index]),
+    );
+  }
+
+  Widget _toolBar() {
+    return Row(
+      children: [
+        SegmentedButton<TodoFilter>(
+          segments: [
+            for (final filter in TodoFilter.values)
+              ButtonSegment(value: filter, label: Text(filter.label)),
+          ],
+          selected: {_viewmodel.filter},
+          onSelectionChanged: (selected) =>
+              _viewmodel.setFilter(selected.first),
+        ),
+      ],
     );
   }
 
